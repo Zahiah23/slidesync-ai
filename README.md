@@ -23,7 +23,10 @@ SlideSync AI analyzes uploaded lecture slides, extracts key topics, and uses Ret
 HTML, CSS, JavaScript (web interface), designed with the MVC pattern and UML models (Class, Sequence, Activity).
 
 ## Team
-Jannat Bisher, Tasneem Aljoudi, Fatimah Alzaeem, Zahiah Nabil Radi
+Developed as a team project at Prince Mugrin University. I really enjoyed working with my team, sharing ideas, and building the system together.
 
 ## My Contribution
-(Write here the part you worked on.)
+- Designed the system diagrams, including UML models (Class, Sequence, and Activity)
+- Worked in depth on the system features and their requirements
+- Contributed to system modeling
+- Designed and built part of the user interface (UI)
