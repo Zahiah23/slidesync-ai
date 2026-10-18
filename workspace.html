@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workspace — SlideSync</title>
+<script>(function(){try{var t=localStorage.getItem('slidesync_theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="app-enter">
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="app-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <button class="sidebar-close" onclick="toggleSidebar()" aria-label="Close sidebar">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <a href="my-space.html" class="sidebar-brand">
+      <span class="brand-mark">S</span>
+      SlideSync
+    </a>
+
+    <div class="sidebar-section-label">Menu</div>
+    <nav class="sidebar-nav">
+      <a href="my-space.html" class="nav-item">
+        <i class="fa-solid fa-house"></i> Home
+      </a>
+      <a href="index.html#features" class="nav-item">
+        <i class="fa-solid fa-sparkles"></i> Features
+      </a>
+      <a href="my-space.html" class="nav-item active">
+        <i class="fa-solid fa-folder-open"></i> My Space
+      </a>
+      <a href="index.html#about" class="nav-item">
+        <i class="fa-solid fa-circle-info"></i> About
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-tools">
+        <div class="user-info">
+          <div class="user-avatar" id="userInitials">U</div>
+          <div class="user-meta">
+            <div class="user-name" id="userName">User Name</div>
+            <div class="user-uni" id="userUni">University</div>
+          </div>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+          <span class="ti ti-sun"><i class="fa-solid fa-sun"></i></span>
+          <span class="ti ti-moon"><i class="fa-solid fa-moon"></i></span>
+        </button>
+      </div>
+      <button class="signout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Workspace -->
+  <main style="min-width:0; display:flex; flex-direction:column;">
+
+    <div class="mobile-header" style="padding:16px 16px 0;">
+      <button class="sidebar-mobile-toggle" onclick="toggleSidebar()" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <a href="my-space.html" class="brand">
+        <span class="brand-mark">S</span> SlideSync
+      </a>
+      <a href="my-space.html" class="btn btn-ghost btn-sm">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </a>
+    </div>
+
+    <div class="workspace-layout" style="flex:1;">
+      <!-- Left panel -->
+      <section class="workspace-left">
+        <div class="workspace-header">
+          <h2>
+            <i class="fa-solid fa-layer-group" style="color:var(--primary-light);"></i>
+            <span class="title-text" id="projectTitleHeader">Project</span>
+          </h2>
+          <a href="my-space.html" class="btn btn-ghost btn-sm" title="Back to My Space">
+            <i class="fa-solid fa-arrow-left"></i>
+          </a>
+        </div>
+
+        <label class="upload-zone" id="uploadZone">
+          <input type="file" id="fileInput" multiple accept=".pdf,.ppt,.pptx">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <div class="upload-zone-title">Upload slides</div>
+          <div class="upload-zone-help">Drop or click — PDF, PPT, PPTX (max 50MB)</div>
+        </label>
+
+        <div class="upload-status" id="uploadStatus"></div>
+
+        <div class="thumbnails" id="thumbnails">
+          <!-- Slide thumbnails rendered by JS -->
+        </div>
+
+        <!-- AI Chat -->
+        <div class="chat-section">
+          <div class="chat-header">
+            <span class="ai-status"></span>
+            <i class="fa-solid fa-robot" style="color:var(--primary-light);"></i>
+            AI Assistant
+            <span style="margin-left:auto; font-size:11px; color:var(--slate-500); font-weight:400;">
+              RAG enabled
+            </span>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <div class="chat-message ai">
+              Hi! I've analyzed your slides and surfaced topic updates with confidence
+              scores. Ask me anything about a specific slide, or how I made a decision.
+            </div>
+          </div>
+          <form class="chat-input-row" onsubmit="sendChat(event)">
+            <input type="text" class="chat-input" id="chatInput"
+                   placeholder="Ask about a slide, topic, or source…">
+            <button type="submit" class="chat-send" aria-label="Send">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Right panel -->
+      <section class="workspace-right">
+        <nav class="tabs" role="tablist">
+          <button class="tab active" data-tab="summary" onclick="switchTab('summary')">
+            <i class="fa-regular fa-file-lines"></i> Summary
+            <span class="count" id="summaryCount">8</span>
+          </button>
+          <button class="tab" data-tab="eslides" onclick="switchTab('eslides')">
+            <i class="fa-solid fa-table-columns"></i> E-Slides
+            <span class="count" id="eslidesCount">8</span>
+          </button>
+          <button class="tab" data-tab="sources" onclick="switchTab('sources')">
+            <i class="fa-solid fa-link"></i> Sources
+            <span class="count" id="sourcesCount">12</span>
+          </button>
+        </nav>
+
+        <div class="tab-toolbar">
+          <div class="info" id="tabToolbarInfo">
+            <strong>8 topics extracted</strong> · 6 high-confidence · 2 needing review
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-outline btn-sm">
+              <i class="fa-solid fa-rotate"></i> Re-analyze
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="exportSlides()" id="exportBtn">
+              <i class="fa-solid fa-file-export"></i> Export Enhanced Slides
+            </button>
+          </div>
+        </div>
+
+        <div class="tab-content-wrap">
+          <!-- Summary tab -->
+          <div class="tab-pane active" id="tab-summary">
+            <div id="summaryList"></div>
+          </div>
+
+          <!-- E-Slides tab -->
+          <div class="tab-pane" id="tab-eslides">
+            <div id="eslidesList"></div>
+          </div>
+
+          <!-- Sources tab -->
+          <div class="tab-pane" id="tab-sources">
+            <div id="sourcesList"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="app.js"></script>
+<script>
+  if (!requireAuth()) { /* redirected */ }
+  else {
+    initSidebarUserInfo();
+    initWorkspace();
+  }
+</script>
+</body>
+</html>

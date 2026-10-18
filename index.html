@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlideSync — Keep your lectures alive with AI</title>
+<meta name="description" content="AI-powered lecture update platform with RAG. Built for instructors and institutions to keep slide content current.">
+<script>(function(){try{var t=localStorage.getItem('slidesync_theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ====== Public nav ====== -->
+<nav class="public-nav" id="publicNav">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">S</span>
+      SlideSync
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#features">Features</a>
+      <a href="#instructors">For Instructors</a>
+      <a href="#about">About</a>
+    </div>
+    <div class="nav-actions">
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <span class="ti ti-sun"><i class="fa-solid fa-sun"></i></span>
+        <span class="ti ti-moon"><i class="fa-solid fa-moon"></i></span>
+      </button>
+      <button class="btn btn-light" onclick="openLogin()">
+        <i class="fa-regular fa-arrow-right-to-bracket"></i> Sign In
+      </button>
+      <button class="mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ====== Hero ====== -->
+<header class="hero-bg">
+  <div class="container hero">
+    <span class="hero-badge">
+      <i class="fa-solid fa-sparkles"></i> AI-Powered Lecture Updates
+    </span>
+    <h1>Keep your lectures<br>alive with AI</h1>
+    <p class="subhead">
+      RAG-powered topic extraction, confidence-based updates, and side-by-side
+      e-slides built for instructors and institutions.
+    </p>
+
+    <div class="hero-cta">
+      <i class="fa-regular fa-envelope input-icon"></i>
+      <input type="email" placeholder="Institutional email address" id="heroEmail" autocomplete="email">
+      <button class="btn btn-primary" onclick="openLoginWithEmail()">Sign In</button>
+    </div>
+
+    <div class="trust-signals">
+      <span><i class="fa-solid fa-shield-halved"></i> Institutional SSO</span>
+      <span><i class="fa-solid fa-lock"></i> Secure sharing</span>
+      <span><i class="fa-solid fa-file-export"></i> PDF / PPTX export</span>
+    </div>
+  </div>
+
+  <!-- Workspace mockup -->
+  <div class="hero-mockup-wrap">
+    <div class="hero-mockup">
+      <aside class="mockup-sidebar">
+        <div class="mockup-sidebar-brand">
+          <span class="dot">S</span> SlideSync
+        </div>
+        <div class="mockup-nav-item active"><i class="fa-solid fa-house"></i> My Space</div>
+        <div class="mockup-nav-item"><i class="fa-solid fa-layer-group"></i> Slides</div>
+        <div class="mockup-nav-item"><i class="fa-regular fa-file-lines"></i> Summary</div>
+        <div class="mockup-nav-item"><i class="fa-solid fa-robot"></i> AI Chat</div>
+        <div class="mockup-nav-item"><i class="fa-solid fa-link"></i> Sources</div>
+        <div class="mockup-nav-item"><i class="fa-solid fa-clock-rotate-left"></i> Versions</div>
+        <div class="mockup-nav-item"><i class="fa-regular fa-calendar"></i> Schedule</div>
+        <div class="mockup-nav-item"><i class="fa-regular fa-comment-dots"></i> Notes</div>
+      </aside>
+      <div class="mockup-main">
+        <div class="mockup-topbar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span>Search topics or slides</span>
+          <span class="spacer"></span>
+          <span class="pill">Add slide</span>
+          <i class="fa-regular fa-bell"></i>
+        </div>
+        <div class="mockup-stats">
+          <div class="mockup-stat">
+            <span class="view">View detail</span>
+            <div class="num">42</div>
+            <div class="label">Slides updated</div>
+          </div>
+          <div class="mockup-stat">
+            <span class="view">View detail</span>
+            <div class="num">21</div>
+            <div class="label">Sources cited</div>
+          </div>
+          <div class="mockup-stat">
+            <span class="view">View detail</span>
+            <div class="num">68</div>
+            <div class="label">Topics extracted</div>
+          </div>
+        </div>
+        <div class="mockup-row">
+          <div class="mockup-card">
+            <div class="mockup-card-title"><i class="fa-solid fa-chart-column"></i> Update Confidence</div>
+            <div class="mockup-card-sub">Last 7 days</div>
+            <div class="mockup-bars">
+              <span style="height:25%"></span>
+              <span style="height:55%"></span>
+              <span style="height:40%"></span>
+              <span class="hi" style="height:90%"></span>
+              <span style="height:65%"></span>
+              <span style="height:48%"></span>
+              <span style="height:35%"></span>
+            </div>
+          </div>
+          <div class="mockup-card">
+            <div class="mockup-card-title"><i class="fa-regular fa-clock"></i> Recent activity</div>
+            <div class="mockup-card-sub">Latest AI suggestions</div>
+            <div class="mockup-activity">
+              <div class="mockup-activity-row">
+                <div class="av"></div>
+                <div class="info"><div class="title">Topic: Transformer architecture</div></div>
+                <div class="time">2m ago</div>
+              </div>
+              <div class="mockup-activity-row">
+                <div class="av"></div>
+                <div class="info"><div class="title">Source added: arxiv.org/2024/12345</div></div>
+                <div class="time">14m ago</div>
+              </div>
+              <div class="mockup-activity-row">
+                <div class="av"></div>
+                <div class="info"><div class="title">Slide 12 update approved</div></div>
+                <div class="time">1h ago</div>
+              </div>
+              <div class="mockup-activity-row">
+                <div class="av"></div>
+                <div class="info"><div class="title">RAG index refreshed</div></div>
+                <div class="time">3h ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== Trust strip ====== -->
+<section class="trust-strip">
+  <div class="container">
+    <div class="trust-strip-label reveal">Trusted by educators at</div>
+    <div class="trust-logos reveal-stagger">
+      <span><i class="fa-solid fa-graduation-cap"></i> Northbridge</span>
+      <span><i class="fa-solid fa-flask"></i> RiverState U</span>
+      <span><i class="fa-solid fa-atom"></i> Cascadia Tech</span>
+      <span><i class="fa-solid fa-microscope"></i> Hartwell Institute</span>
+      <span><i class="fa-solid fa-book"></i> Aldridge College</span>
+      <span><i class="fa-solid fa-square-root-variable"></i> Mercier U</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== Features ====== -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-eyebrow"><i class="fa-solid fa-sparkles"></i> Key Features</span>
+      <h2>Less re-authoring.<br>More teaching.</h2>
+      <p class="section-subhead">
+        SlideSync ingests your existing decks, extracts topics with RAG-grounded research,
+        and surfaces updates with confidence scoring — so you stay in control.
+      </p>
+    </div>
+
+    <div class="features-grid reveal-stagger">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-brain"></i></div>
+        <h3>AI Topic Extraction</h3>
+        <p>Upload PDF, PPT or PPTX and SlideSync's RAG pipeline identifies the main topics and key concepts in each slide.</p>
+        <div class="visual"><i class="fa-solid fa-diagram-project"></i></div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-gauge-high"></i></div>
+        <h3>Confidence-Based Updates</h3>
+        <p>High-confidence changes auto-apply. Low-confidence ones surface as suggestions you can review, approve, or reject.</p>
+        <div class="visual"><i class="fa-solid fa-check-double"></i></div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-table-columns"></i></div>
+        <h3>Side-by-Side E-Slides</h3>
+        <p>Compare original slides with AI-generated update notes inline. Edit keywords directly, then export the enhanced deck.</p>
+        <div class="visual"><i class="fa-regular fa-clone"></i></div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-link"></i></div>
+        <h3>RAG-Powered Sources</h3>
+        <p>Every suggestion is tied back to the external resources behind it — peer-reviewed papers, docs, and trusted publications.</p>
+        <div class="visual"><i class="fa-solid fa-book-open"></i></div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-sliders"></i></div>
+        <h3>Tunable Recency</h3>
+        <p>Set timeframes, preferred sources, exclusions, and the kinds of updates you want. SlideSync respects your editorial voice.</p>
+        <div class="visual"><i class="fa-regular fa-calendar-check"></i></div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-file-export"></i></div>
+        <h3>Export Anywhere</h3>
+        <p>Download enhanced decks as PDF or PPTX. Share securely across your institution with role-based access controls.</p>
+        <div class="visual"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== For instructors ====== -->
+<section class="section instructors" id="instructors">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-eyebrow"><i class="fa-solid fa-chalkboard-user"></i> For Instructors</span>
+      <h2>Built for academic workflows</h2>
+      <p class="section-subhead">
+        Three steps from a stale slide deck to a current, citation-backed lecture.
+      </p>
+    </div>
+
+    <div class="instructors-grid reveal-stagger">
+      <div class="step-card">
+        <span class="step-num">01</span>
+        <i class="fa-solid fa-cloud-arrow-up step-icon"></i>
+        <h3>Upload your deck</h3>
+        <p>Drag in PDF, PPT, or PPTX files. We validate and extract every slide, preserving structure and ordering.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">02</span>
+        <i class="fa-solid fa-wand-magic-sparkles step-icon"></i>
+        <h3>Set your preferences</h3>
+        <p>Choose recency, preferred and excluded sources, summarization style, and the types of updates you want.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">03</span>
+        <i class="fa-solid fa-rocket step-icon"></i>
+        <h3>Review and export</h3>
+        <p>Approve AI suggestions in the side-by-side workspace, then export the enhanced deck back to your LMS.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== CTA banner ====== -->
+<section id="about">
+  <div class="container">
+    <div class="cta-banner reveal-scale">
+      <h2>Ready to refresh your lectures?</h2>
+      <p>Sign in with your institutional email and create your first SlideSync project profile in under a minute.</p>
+      <button class="btn btn-light btn-lg" onclick="openLogin()">
+        <i class="fa-regular fa-arrow-right-to-bracket"></i> Sign In to SlideSync
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ====== Footer ====== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <a href="index.html" class="brand">
+          <span class="brand-mark">S</span>
+          SlideSync
+        </a>
+        <p class="footer-brand-text">
+          AI-powered lecture update platform built for instructors and institutions.
+          Keep your slides current — with citations.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#instructors">For Instructors</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Changelog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 SlideSync. All rights reserved.</span>
+      <div class="footer-socials">
+        <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ====== Login modal ====== -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h2>Welcome back</h2>
+        <p>Sign in with your institutional account to continue.</p>
+      </div>
+      <button class="modal-close" onclick="closeLogin()" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-error" id="loginError">
+        <i class="fa-solid fa-circle-exclamation"></i> <span id="loginErrorText"></span>
+      </div>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-row">
+          <label for="loginEmail">Institutional email <span class="req">*</span></label>
+          <input type="email" id="loginEmail" class="form-input"
+                 placeholder="you@university.edu" required autocomplete="email">
+          <div class="form-help">Use your university or institution-issued email.</div>
+        </div>
+        <div class="form-row">
+          <label for="loginPassword">Password <span class="req">*</span></label>
+          <input type="password" id="loginPassword" class="form-input"
+                 placeholder="Enter your password" required autocomplete="current-password" minlength="6">
+        </div>
+        <div class="form-row" style="display:flex; justify-content:space-between; align-items:center;">
+          <label class="checkbox-pill checked" style="cursor:pointer;">
+            <input type="checkbox" id="rememberMe" checked>
+            Remember me
+          </label>
+          <a href="#" style="font-size:13px; color:var(--primary-light);">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">
+          <i class="fa-solid fa-arrow-right"></i> Sign In
+        </button>
+        <div style="text-align:center; margin-top:14px; font-size:13px; color:var(--slate-400);">
+          Or sign in with
+          <button type="button" style="color:var(--primary-light); margin-left:4px; font-weight:600;"
+                  onclick="handleSSO()">
+            <i class="fa-solid fa-shield-halved"></i> Institutional SSO
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

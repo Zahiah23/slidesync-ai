@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Space — SlideSync</title>
+<script>(function(){try{var t=localStorage.getItem('slidesync_theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="app-enter">
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="app-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <button class="sidebar-close" onclick="toggleSidebar()" aria-label="Close sidebar">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <a href="my-space.html" class="sidebar-brand">
+      <span class="brand-mark">S</span>
+      SlideSync
+    </a>
+
+    <div class="sidebar-section-label">Menu</div>
+    <nav class="sidebar-nav">
+      <a href="my-space.html" class="nav-item">
+        <i class="fa-solid fa-house"></i> Home
+      </a>
+      <a href="index.html#features" class="nav-item">
+        <i class="fa-solid fa-sparkles"></i> Features
+      </a>
+      <a href="my-space.html" class="nav-item active">
+        <i class="fa-solid fa-folder-open"></i> My Space
+      </a>
+      <a href="index.html#about" class="nav-item">
+        <i class="fa-solid fa-circle-info"></i> About
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-tools">
+        <div class="user-info">
+          <div class="user-avatar" id="userInitials">U</div>
+          <div class="user-meta">
+            <div class="user-name" id="userName">User Name</div>
+            <div class="user-uni" id="userUni">University</div>
+          </div>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+          <span class="ti ti-sun"><i class="fa-solid fa-sun"></i></span>
+          <span class="ti ti-moon"><i class="fa-solid fa-moon"></i></span>
+        </button>
+      </div>
+      <button class="signout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="mobile-header">
+      <button class="sidebar-mobile-toggle" onclick="toggleSidebar()" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <a href="my-space.html" class="brand">
+        <span class="brand-mark">S</span> SlideSync
+      </a>
+      <div style="width:40px;"></div>
+    </div>
+
+    <div class="main-header">
+      <div>
+        <h1>My Project Profiles</h1>
+        <p>Lecture decks you've enhanced with SlideSync, sorted by last modified.</p>
+      </div>
+      <button class="btn btn-primary btn-lg" onclick="openProjectModal()">
+        <i class="fa-solid fa-plus"></i> New Project Profile
+      </button>
+    </div>
+
+    <div class="profile-grid" id="profileGrid">
+      <!-- Cards rendered by JS -->
+    </div>
+  </main>
+</div>
+
+<!-- Project profile modal (create / edit) -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div>
+        <h2 id="projectModalTitle">New Project Profile</h2>
+        <p id="projectModalSubtitle">Configure how SlideSync should update this lecture deck.</p>
+      </div>
+      <button class="modal-close" onclick="closeProjectModal()" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form id="projectForm" onsubmit="handleProjectSubmit(event)">
+        <input type="hidden" id="projectId">
+
+        <div class="form-row">
+          <label for="projectTitle">Project title <span class="req">*</span></label>
+          <input type="text" id="projectTitle" class="form-input"
+                 placeholder="e.g. Intro to Machine Learning — Fall 2026" required>
+        </div>
+
+        <div class="form-row">
+          <label for="recency">Recency of information</label>
+          <select id="recency" class="form-select">
+            <option value="3m">Last 3 months</option>
+            <option value="6m" selected>Last 6 months</option>
+            <option value="1y">Last 12 months</option>
+            <option value="2y">Last 2 years</option>
+            <option value="5y">Last 5 years</option>
+            <option value="all">No time limit</option>
+          </select>
+          <div class="form-help">SlideSync will prioritize sources within this window.</div>
+        </div>
+
+        <div class="form-row">
+          <label for="preferredSources">Preferred sources</label>
+          <textarea id="preferredSources" class="form-textarea"
+            placeholder="One per line, e.g.&#10;arxiv.org&#10;nature.com&#10;your-uni-press.edu"></textarea>
+          <div class="form-help">Domains, journals, or repositories SlideSync should favor.</div>
+        </div>
+
+        <div class="form-row">
+          <label for="excludedSources">Excluded sources</label>
+          <textarea id="excludedSources" class="form-textarea"
+            placeholder="One per line, e.g.&#10;wikipedia.org&#10;medium.com"></textarea>
+          <div class="form-help">Sources SlideSync should never cite.</div>
+        </div>
+
+        <div class="form-row">
+          <label>Types of updates wanted</label>
+          <div class="checkbox-group" id="updateTypesGroup">
+            <label class="checkbox-pill">
+              <input type="checkbox" value="new-research"> New research
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" value="terminology"> Terminology
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" value="examples"> Examples
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" value="statistics"> Statistics
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" value="case-studies"> Case studies
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" value="references"> References
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" value="visuals"> Visuals
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="summarization">Summarization preferences</label>
+          <select id="summarization" class="form-select">
+            <option value="concise" selected>Concise — bullet points only</option>
+            <option value="balanced">Balanced — short paragraphs</option>
+            <option value="detailed">Detailed — full explanations</option>
+            <option value="academic">Academic — formal, with citations inline</option>
+          </select>
+        </div>
+
+        <div id="versionHistoryWrap" style="display:none;">
+          <div class="modal-form-divider"></div>
+          <div class="version-history">
+            <h4><i class="fa-solid fa-clock-rotate-left"></i> Version history</h4>
+            <div id="versionList"></div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="closeProjectModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="projectSaveBtn">
+            <i class="fa-solid fa-check"></i> Save Profile
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirm modal -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <div class="modal-body" style="padding-top:32px;">
+      <div class="confirm-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <h2 style="text-align:center; font-size:20px; color:var(--white); margin-bottom:8px;">
+        Delete project profile?
+      </h2>
+      <p class="modal-confirm-text">
+        Are you sure you want to delete <strong id="deleteProjectName"></strong>?
+        This action cannot be undone — slides, summaries, and versions will be removed permanently.
+      </p>
+      <div class="form-actions" style="justify-content:center; margin-top:24px;">
+        <button class="btn btn-outline" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDelete()">
+          <i class="fa-solid fa-trash"></i> Delete profile
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="app.js"></script>
+<script>
+  if (!requireAuth()) { /* redirected */ }
+  else {
+    initSidebarUserInfo();
+    renderProfiles();
+  }
+</script>
+</body>
+</html>
